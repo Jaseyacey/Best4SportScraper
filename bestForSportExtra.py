@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 
 DRIVER_PATH = '/Users/jasonbeedle/Desktop/snaviescraper/chromedriver'
 driver = webdriver.Chrome(executable_path=DRIVER_PATH)
-driver.get("http://best4sport.tv/")
+driver.get("http://best4sport.tv/extra")
 results = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(
     (By.CSS_SELECTOR, ".program1_content_container")))
 soup = BeautifulSoup(results.get_attribute("outerHTML"), 'html.parser')
@@ -17,7 +17,8 @@ program_text = []
 program_info = []
 for item in soup.select(".program_details "):
     if item.find_next(class_='program_time'):
-        program_time.append(item.find_next(class_='program_time').text.strip())
+        program_time.append(item.find_next(
+            class_='program_time').text.strip())
     else:
         program_time.append("Nan")
     if item.find_next(class_='sport'):
@@ -36,4 +37,4 @@ for item in soup.select(".program_details "):
 df = pd.DataFrame({"program_time": program_time, "sport": sport,
                    "program_text": program_text, "program_info": program_info})
 print(df)
-df.to_csv("sportSD.csv")
+df.to_csv("sportExtra.csv")
